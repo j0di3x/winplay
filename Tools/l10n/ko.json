@@ -98,5 +98,12 @@
  "Bring back": "되살리기",
  "Delete the bottle…": "환경 삭제…",
  "Also in this bottle: %@. Those stay if you keep it, and are removed if you delete it.": "이 환경에는 %@도 있습니다. 환경을 보관하면 남고, 삭제하면 함께 제거됩니다.",
- "Also in this bottle, and removed with it: %@.": "이 환경에 있는 %@도 함께 제거됩니다."
+ "Also in this bottle, and removed with it: %@.": "이 환경에 있는 %@도 함께 제거됩니다.",
+ "Open %@ with WinPlay": "WinPlay로 %@ 열기",
+ "Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed.": "설치 프로그램인가요, 아니면 게임이나 앱 자체인가요? 설치 프로그램은 새 환경에서 실행되며, 끝나면 WinPlay가 설치된 항목을 추가하도록 제안합니다.",
+ "Run the installer": "설치 프로그램 실행",
+ "Add as a game or app": "게임 또는 앱으로 추가",
+ "macOS didn't change the default app. You can also do it in Finder: Get Info → Open with → Change All.": "macOS가 기본 앱을 변경하지 않았습니다. Finder에서도 할 수 있습니다: 정보 가져오기 → 다음으로 열기 → 모두 변경.",
+ "WinPlay now opens .exe, .msi, .bat and .cmd files.": "이제 WinPlay가 .exe, .msi, .bat, .cmd 파일을 엽니다.",
+ "Open Windows Programs with WinPlay": "Windows 프로그램을 WinPlay로 열기"
 }

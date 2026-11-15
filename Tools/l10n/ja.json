@@ -98,5 +98,12 @@
  "Bring back": "戻す",
  "Delete the bottle…": "環境を削除…",
  "Also in this bottle: %@. Those stay if you keep it, and are removed if you delete it.": "この環境には %@ も入っています。環境を残せばそのまま残り、削除すると一緒に削除されます。",
- "Also in this bottle, and removed with it: %@.": "この環境には %@ も入っていて、一緒に削除されます。"
+ "Also in this bottle, and removed with it: %@.": "この環境には %@ も入っていて、一緒に削除されます。",
+ "Open %@ with WinPlay": "%@ をWinPlayで開く",
+ "Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed.": "インストーラですか？ それともゲームやアプリ本体ですか？ インストーラは新しい環境で実行され、終わるとWinPlayがインストールされたものを提案します。",
+ "Run the installer": "インストーラを実行",
+ "Add as a game or app": "ゲームまたはアプリとして追加",
+ "macOS didn't change the default app. You can also do it in Finder: Get Info → Open with → Change All.": "macOSはデフォルトのアプリを変更しませんでした。Finderでも変更できます：情報を見る → このアプリケーションで開く → すべてを変更。",
+ "WinPlay now opens .exe, .msi, .bat and .cmd files.": "WinPlayで .exe、.msi、.bat、.cmd ファイルを開くようになりました。",
+ "Open Windows Programs with WinPlay": "WindowsプログラムをWinPlayで開く"
 }

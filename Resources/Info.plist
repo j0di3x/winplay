@@ -13,4 +13,42 @@
 <key>LSMinimumSystemVersion</key><string>14.0</string>
 <key>LSApplicationCategoryType</key><string>public.app-category.games</string>
 <key>NSHighResolutionCapable</key><true/>
+<key>CFBundleDocumentTypes</key><array>
+  <dict>
+    <key>CFBundleTypeName</key><string>Windows program</string>
+    <key>CFBundleTypeRole</key><string>Viewer</string>
+    <key>LSHandlerRank</key><string>Default</string>
+    <key>LSItemContentTypes</key><array>
+      <string>com.microsoft.windows-executable</string>
+      <string>com.microsoft.windows-batch-file</string>
+    </array>
+  </dict>
+  <dict>
+    <key>CFBundleTypeName</key><string>Windows installer</string>
+    <key>CFBundleTypeRole</key><string>Viewer</string>
+    <key>LSHandlerRank</key><string>Default</string>
+    <key>LSItemContentTypes</key><array>
+      <string>com.microsoft.windows-installer</string>
+    </array>
+  </dict>
+</array>
+<key>UTImportedTypeDeclarations</key><array>
+  <dict>
+    <key>UTTypeIdentifier</key><string>com.microsoft.windows-installer</string>
+    <key>UTTypeDescription</key><string>Windows Installer package</string>
+    <key>UTTypeConformsTo</key><array><string>public.data</string></array>
+    <key>UTTypeTagSpecification</key><dict>
+      <key>public.filename-extension</key><array><string>msi</string></array>
+      <key>public.mime-type</key><array><string>application/x-msi</string></array>
+    </dict>
+  </dict>
+  <dict>
+    <key>UTTypeIdentifier</key><string>com.microsoft.windows-batch-file</string>
+    <key>UTTypeDescription</key><string>Windows batch file</string>
+    <key>UTTypeConformsTo</key><array><string>public.data</string></array>
+    <key>UTTypeTagSpecification</key><dict>
+      <key>public.filename-extension</key><array><string>bat</string><string>cmd</string></array>
+    </dict>
+  </dict>
+</array>
 </dict></plist>

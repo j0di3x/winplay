@@ -15,6 +15,13 @@
 "The installer didn't add a program. Choose one in the game's settings, or remove it." = "安裝程式沒有加入任何程式。請在遊戲設定中選擇，或將其移除。";
 "No new programs in %@." = "%@ 中沒有新程式。";
 "Added %ld programs to your library." = "已將 %ld 個程式加入資料庫。";
+"Open %@ with WinPlay" = "用 WinPlay 打開 %@";
+"Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed." = "這是安裝程式，還是遊戲或 App 本身？安裝程式會在新環境中執行，完成後 WinPlay 會提供它安裝的內容。";
+"Run the installer" = "執行安裝程式";
+"Add as a game or app" = "加入為遊戲或 App";
+"Cancel" = "取消";
+"macOS didn't change the default app. You can also do it in Finder: Get Info → Open with → Change All." = "macOS 沒有更改預設 App。你也可以在 Finder 中更改：取得資訊 → 打開檔案的應用程式 → 全部更改。";
+"WinPlay now opens .exe, .msi, .bat and .cmd files." = "WinPlay 現在會打開 .exe、.msi、.bat 和 .cmd 檔案。";
 "Steam is already in your library." = "Steam 已在你的遊戲庫中。";
 "Installing Steam…" = "正在安裝 Steam…";
 "Steam installed. Press Play and sign in; the first start updates Steam and takes a few minutes." = "Steam 已安裝。按下「開始遊戲」並登入；第一次啟動 Steam 會更新，需要幾分鐘。";
@@ -28,7 +35,6 @@
 "Remove %@ from your library?" = "要從資料庫移除 %@ 嗎？";
 "It's installed in the Windows bottle of %@, so its files stay there." = "它安裝在 %@ 的 Windows 環境中，所以檔案會留在那裡。";
 "Remove" = "移除";
-"Cancel" = "取消";
 "Removed %@." = "已移除 %@。";
 "Do you also want to delete its Windows bottle? That's its own sandbox, with everything installed in it, its settings and its saves." = "要一併刪除它的 Windows 環境嗎？這是它專屬的沙盒，包含其中安裝的所有內容、設定和存檔。";
 "Keep it to bring %@ back later from Add → Removed games. Delete it to free the space; it goes to the Trash." = "保留它，之後可以從「加入」→「已移除的遊戲」找回 %@。刪除它可以釋放空間，它會移到垃圾桶。";
@@ -94,6 +100,7 @@
 "Add a game's .exe, run a Windows installer, or install Steam." = "加入遊戲的 .exe、執行 Windows 安裝程式，或安裝 Steam。";
 "Downloading %@…" = "正在下載 %@…";
 "No controller" = "無控制器";
+"Open Windows Programs with WinPlay" = "用 WinPlay 打開 Windows 程式";
 "USB" = "USB";
 "Bluetooth" = "藍牙";
 "Wireless" = "無線";

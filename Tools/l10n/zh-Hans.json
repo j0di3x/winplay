@@ -98,5 +98,12 @@
  "Bring back": "找回",
  "Delete the bottle…": "删除环境…",
  "Also in this bottle: %@. Those stay if you keep it, and are removed if you delete it.": "这个环境中还有：%@。保留环境时它们会留下，删除环境时会一并移除。",
- "Also in this bottle, and removed with it: %@.": "这个环境中还有以下项目，会一并移除：%@。"
+ "Also in this bottle, and removed with it: %@.": "这个环境中还有以下项目，会一并移除：%@。",
+ "Open %@ with WinPlay": "用 WinPlay 打开 %@",
+ "Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed.": "这是安装程序，还是游戏或应用本身？安装程序会在新环境中运行，完成后 WinPlay 会提供它安装的内容。",
+ "Run the installer": "运行安装程序",
+ "Add as a game or app": "添加为游戏或应用",
+ "macOS didn't change the default app. You can also do it in Finder: Get Info → Open with → Change All.": "macOS 没有更改默认应用。你也可以在访达中更改：显示简介 → 打开方式 → 全部更改。",
+ "WinPlay now opens .exe, .msi, .bat and .cmd files.": "WinPlay 现在会打开 .exe、.msi、.bat 和 .cmd 文件。",
+ "Open Windows Programs with WinPlay": "用 WinPlay 打开 Windows 程序"
 }

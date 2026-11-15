@@ -16,5 +16,11 @@ fi
 LOG="$B/last-run.log"
 echo "== $(date) $EXE $* (d3dmetal=${WP_D3DMETAL:-1} metal4=$WP_METAL4 hud=$WP_HUD)" > "$LOG"
 if [[ "$EXE" == /* ]]; then cd "${EXE:h}"; else cd "$B/prefix/drive_c"; fi
-"$W/bin/wine" "$EXE" "$@" >> "$LOG" 2>&1
+case "${EXE:e:l}" in
+  # .msi and .bat/.cmd aren't programs: Windows' start opens them with msiexec or cmd
+  msi|bat|cmd)
+    if [[ "$EXE" == /* ]]; then "$W/bin/wine" start /wait /unix "$EXE" "$@" >> "$LOG" 2>&1
+    else "$W/bin/wine" start /wait "$EXE" "$@" >> "$LOG" 2>&1; fi ;;
+  *) "$W/bin/wine" "$EXE" "$@" >> "$LOG" 2>&1 ;;
+esac
 "$W/bin/wineserver" -w

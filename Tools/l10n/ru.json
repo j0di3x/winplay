@@ -98,5 +98,12 @@
  "Bring back": "Вернуть",
  "Delete the bottle…": "Удалить среду…",
  "Also in this bottle: %@. Those stay if you keep it, and are removed if you delete it.": "Также в этой среде: %@. Они останутся, если её сохранить, и будут удалены вместе с ней.",
- "Also in this bottle, and removed with it: %@.": "Также в этой среде и будут удалены вместе с ней: %@."
+ "Also in this bottle, and removed with it: %@.": "Также в этой среде и будут удалены вместе с ней: %@.",
+ "Open %@ with WinPlay": "Открыть %@ в WinPlay",
+ "Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed.": "Это установщик или сама игра либо приложение? Установщик запускается в новой среде, а потом WinPlay предложит добавить то, что он установил.",
+ "Run the installer": "Запустить установщик",
+ "Add as a game or app": "Добавить как игру или приложение",
+ "macOS didn't change the default app. You can also do it in Finder: Get Info → Open with → Change All.": "macOS не изменила приложение по умолчанию. Это можно сделать и в Finder: Свойства → Открывать в приложении → Изменить все.",
+ "WinPlay now opens .exe, .msi, .bat and .cmd files.": "Теперь WinPlay открывает файлы .exe, .msi, .bat и .cmd.",
+ "Open Windows Programs with WinPlay": "Открывать программы Windows в WinPlay"
 }

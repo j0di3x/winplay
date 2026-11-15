@@ -19,6 +19,9 @@ on Metal. Each game gets its own Windows setup, so one broken install never affe
 - **Finds new programs:** whenever an installer, a game launcher or Steam closes, WinPlay looks in
   that bottle's `Program Files` and `Program Files (x86)` for new `.exe` files and asks which ones
   to add to the library. Right-click a tile → *Look for new programs* to check by hand
+- **Opens Windows files:** double-click an `.exe`, `.msi`, `.bat` or `.cmd` in Finder (or use
+  *Open With → WinPlay*). Installers run in a new bottle; a game's `.exe` gets its own tile and
+  starts. *WinPlay → Open Windows Programs with WinPlay* makes it the default app for these files
 - **Steam:** one click installs the Windows Steam client into its own bottle, so you can sign in and
   play your Steam library
 - **One bottle per game:** a clean Windows 10 setup cloned in under a second (APFS clones, so it

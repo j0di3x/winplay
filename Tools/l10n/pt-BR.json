@@ -98,5 +98,12 @@
  "Bring back": "Trazer de volta",
  "Delete the bottle…": "Apagar o ambiente…",
  "Also in this bottle: %@. Those stay if you keep it, and are removed if you delete it.": "Também neste ambiente: %@. Eles ficam se você mantiver o ambiente e são removidos se você apagá-lo.",
- "Also in this bottle, and removed with it: %@.": "Também neste ambiente, e removidos junto com ele: %@."
+ "Also in this bottle, and removed with it: %@.": "Também neste ambiente, e removidos junto com ele: %@.",
+ "Open %@ with WinPlay": "Abrir %@ com o WinPlay",
+ "Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed.": "É um instalador, ou o próprio jogo ou app? Um instalador roda em um ambiente novo, e depois o WinPlay oferece o que ele instalou.",
+ "Run the installer": "Executar o instalador",
+ "Add as a game or app": "Adicionar como jogo ou app",
+ "macOS didn't change the default app. You can also do it in Finder: Get Info → Open with → Change All.": "O macOS não mudou o app padrão. Você também pode fazer isso no Finder: Obter Informações → Abrir com → Alterar Tudo.",
+ "WinPlay now opens .exe, .msi, .bat and .cmd files.": "O WinPlay agora abre arquivos .exe, .msi, .bat e .cmd.",
+ "Open Windows Programs with WinPlay": "Abrir programas do Windows com o WinPlay"
 }

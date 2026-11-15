@@ -15,6 +15,13 @@
 "The installer didn't add a program. Choose one in the game's settings, or remove it." = "Установщик не добавил ни одной программы. Выберите её в настройках игры или удалите игру.";
 "No new programs in %@." = "В %@ нет новых программ.";
 "Added %ld programs to your library." = "Добавлено программ в библиотеку: %ld.";
+"Open %@ with WinPlay" = "Открыть %@ в WinPlay";
+"Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed." = "Это установщик или сама игра либо приложение? Установщик запускается в новой среде, а потом WinPlay предложит добавить то, что он установил.";
+"Run the installer" = "Запустить установщик";
+"Add as a game or app" = "Добавить как игру или приложение";
+"Cancel" = "Отмена";
+"macOS didn't change the default app. You can also do it in Finder: Get Info → Open with → Change All." = "macOS не изменила приложение по умолчанию. Это можно сделать и в Finder: Свойства → Открывать в приложении → Изменить все.";
+"WinPlay now opens .exe, .msi, .bat and .cmd files." = "Теперь WinPlay открывает файлы .exe, .msi, .bat и .cmd.";
 "Steam is already in your library." = "Steam уже в вашей библиотеке.";
 "Installing Steam…" = "Установка Steam…";
 "Steam installed. Press Play and sign in; the first start updates Steam and takes a few minutes." = "Steam установлен. Нажмите «Играть» и войдите; при первом запуске Steam обновляется несколько минут.";
@@ -28,7 +35,6 @@
 "Remove %@ from your library?" = "Убрать %@ из библиотеки?";
 "It's installed in the Windows bottle of %@, so its files stay there." = "Программа установлена в среде Windows игры %@, поэтому её файлы останутся там.";
 "Remove" = "Удалить";
-"Cancel" = "Отмена";
 "Removed %@." = "%@ удалена.";
 "Do you also want to delete its Windows bottle? That's its own sandbox, with everything installed in it, its settings and its saves." = "Удалить и её среду Windows? Это отдельная песочница со всем, что в ней установлено, настройками и сохранениями.";
 "Keep it to bring %@ back later from Add → Removed games. Delete it to free the space; it goes to the Trash." = "Оставьте её, чтобы потом вернуть %@ через «Добавить» → «Удалённые игры». Удалите, чтобы освободить место; она попадёт в Корзину.";
@@ -94,6 +100,7 @@
 "Add a game's .exe, run a Windows installer, or install Steam." = "Добавьте .exe игры, запустите установщик Windows или установите Steam.";
 "Downloading %@…" = "Загрузка: %@…";
 "No controller" = "Нет контроллера";
+"Open Windows Programs with WinPlay" = "Открывать программы Windows в WinPlay";
 "USB" = "USB";
 "Bluetooth" = "Bluetooth";
 "Wireless" = "Беспроводной";

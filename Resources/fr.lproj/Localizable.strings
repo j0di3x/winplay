@@ -15,6 +15,13 @@
 "The installer didn't add a program. Choose one in the game's settings, or remove it." = "L’installeur n’a ajouté aucun programme. Choisissez-en un dans les réglages du jeu, ou supprimez-le.";
 "No new programs in %@." = "Aucun nouveau programme dans %@.";
 "Added %ld programs to your library." = "%ld programmes ajoutés à ta bibliothèque.";
+"Open %@ with WinPlay" = "Ouvrir %@ avec WinPlay";
+"Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed." = "Est-ce un programme d’installation, ou le jeu ou l’app lui-même ? Un programme d’installation tourne dans un nouvel environnement, puis WinPlay te propose ce qu’il a installé.";
+"Run the installer" = "Lancer l’installation";
+"Add as a game or app" = "Ajouter comme jeu ou app";
+"Cancel" = "Annuler";
+"macOS didn't change the default app. You can also do it in Finder: Get Info → Open with → Change All." = "macOS n’a pas changé l’app par défaut. Tu peux aussi le faire dans le Finder : Lire les informations → Ouvrir avec → Tout modifier.";
+"WinPlay now opens .exe, .msi, .bat and .cmd files." = "WinPlay ouvre maintenant les fichiers .exe, .msi, .bat et .cmd.";
 "Steam is already in your library." = "Steam est déjà dans votre bibliothèque.";
 "Installing Steam…" = "Installation de Steam…";
 "Steam installed. Press Play and sign in; the first start updates Steam and takes a few minutes." = "Steam installé. Appuyez sur Jouer et connectez-vous ; au premier lancement, Steam se met à jour pendant quelques minutes.";
@@ -28,7 +35,6 @@
 "Remove %@ from your library?" = "Retirer %@ de ta bibliothèque ?";
 "It's installed in the Windows bottle of %@, so its files stay there." = "Il est installé dans l’environnement Windows de %@, ses fichiers y restent donc.";
 "Remove" = "Supprimer";
-"Cancel" = "Annuler";
 "Removed %@." = "%@ supprimé.";
 "Do you also want to delete its Windows bottle? That's its own sandbox, with everything installed in it, its settings and its saves." = "Veux-tu aussi supprimer son environnement Windows ? C’est son propre bac à sable, avec tout ce qui y est installé, ses réglages et ses sauvegardes.";
 "Keep it to bring %@ back later from Add → Removed games. Delete it to free the space; it goes to the Trash." = "Garde-le pour récupérer %@ plus tard via Ajouter → Jeux retirés. Supprime-le pour libérer de l’espace ; il ira à la Corbeille.";
@@ -94,6 +100,7 @@
 "Add a game's .exe, run a Windows installer, or install Steam." = "Ajoutez le .exe d’un jeu, lancez un installeur Windows ou installez Steam.";
 "Downloading %@…" = "Téléchargement de %@…";
 "No controller" = "Aucune manette";
+"Open Windows Programs with WinPlay" = "Ouvrir les programmes Windows avec WinPlay";
 "USB" = "USB";
 "Bluetooth" = "Bluetooth";
 "Wireless" = "Sans fil";

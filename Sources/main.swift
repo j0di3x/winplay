@@ -342,7 +342,7 @@ final class Library: ObservableObject {
     }
 
     static let exeTypes: [UTType] = [UTType(filenameExtension: "exe"), UTType(filenameExtension: "msi"),
-                                     UTType(filenameExtension: "bat")].compactMap { $0 }
+                                     UTType(filenameExtension: "bat"), UTType(filenameExtension: "cmd")].compactMap { $0 }
 
     /// A game or app that's already installed or portable: just point at its .exe.
     func addProgram() {
@@ -350,11 +350,17 @@ final class Library: ObservableObject {
         panel.allowedContentTypes = Library.exeTypes.filter { $0.preferredFilenameExtension != "msi" }
         panel.message = L("Choose the game's or app's .exe")
         guard panel.runModal() == .OK, let url = panel.url else { return }
+        addProgram(url)
+    }
+
+    @discardableResult
+    func addProgram(_ url: URL) -> Bottle? {
         do {
             let b = try newBottle(name: Library.niceName(url), program: url.path)
             loadIcon(b)
             message = L("Added %@. Press Play.", b.name)
-        } catch { message = error.localizedDescription }
+            return b
+        } catch { message = error.localizedDescription; return nil }
     }
 
     /// Runs a Windows installer in a new bottle. When it closes, WinPlay offers the programs it added.
@@ -364,6 +370,10 @@ final class Library: ObservableObject {
         panel.message = L("Choose the Windows installer (setup.exe or .msi)")
         panel.directoryURL = Paths.home.appendingPathComponent("Downloads")
         guard panel.runModal() == .OK, let url = panel.url else { return }
+        runInstaller(url)
+    }
+
+    func runInstaller(_ url: URL) {
         do {
             let b = try newBottle(name: Library.niceName(url), program: "")
             update(b)
@@ -419,22 +429,82 @@ final class Library: ObservableObject {
         }
         store(o)
         loadIcon(o)
-        for u in rest {
-            let id = String(UUID().uuidString.prefix(8)).lowercased()
-            var g = Bottle(id: id, name: Library.niceName(u), program: Library.windowsPath(u, in: o))
-            g.host = o.id
-            g.metal4 = o.metal4; g.d3dmetal = o.d3dmetal; g.windowsVersion = o.windowsVersion; g.added = Date()
-            try? FileManager.default.createDirectory(at: g.folder, withIntermediateDirectories: true)
-            g.save()
-            bottles.append(g)
-            loadIcon(g)
-        }
-        bottles.sort { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        for u in rest { addGuest(u, in: o) }
         if chosen.isEmpty {
             message = o.program.isEmpty ? L("The installer didn't add a program. Choose one in the game's settings, or remove it.") : ""
         } else {
             message = chosen.count == 1 ? L("Added %@. Press Play.", Library.niceName(chosen[0]))
                                         : L("Added %ld programs to your library.", chosen.count)
+        }
+    }
+
+    /// Adds a tile for a program that lives inside another game's bottle (and runs there).
+    @discardableResult
+    func addGuest(_ u: URL, in o: Bottle) -> Bottle {
+        let id = String(UUID().uuidString.prefix(8)).lowercased()
+        var g = Bottle(id: id, name: Library.niceName(u), program: Library.windowsPath(u, in: o))
+        g.host = o.id
+        g.metal4 = o.metal4; g.d3dmetal = o.d3dmetal; g.windowsVersion = o.windowsVersion; g.added = Date()
+        try? FileManager.default.createDirectory(at: g.folder, withIntermediateDirectories: true)
+        g.save()
+        bottles.append(g)
+        bottles.sort { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        loadIcon(g)
+        return g
+    }
+
+    // MARK: opening files from Finder
+
+    static let shared = Library()
+
+    /// Windows files opened with WinPlay (double-click, Open With, or dropped on the Dock icon).
+    func open(files: [URL]) {
+        NSApp.activate(ignoringOtherApps: true)
+        for u in files { openFile(u) }
+    }
+
+    private func openFile(_ url: URL) {
+        guard ready else { message = L("Finish setup first."); return }
+        let path = url.standardizedFileURL.path
+        // already in the library: just play it
+        if let t = bottles.first(where: { $0.programFile?.standardizedFileURL.path == path }) { play(t); return }
+        let ext = url.pathExtension.lowercased()
+        // a program inside one of WinPlay's bottles: give it a tile in that bottle
+        if ext != "msi", let o = (bottles + keptBottles).first(where: { $0.host == nil && path.hasPrefix($0.cDrive.path + "/") }) {
+            play(addGuest(url, in: o)); return
+        }
+        switch ext {
+        case "msi": runInstaller(url)
+        case "bat", "cmd": if let b = addProgram(url) { play(b) }
+        default:
+            // an .exe can be an installer or the game itself; ask, with the likely answer first
+            let n = url.deletingPathExtension().lastPathComponent.lowercased()
+            let looksLikeInstaller = ["setup", "install", "installer"].contains(where: n.contains)
+            let a = NSAlert()
+            a.messageText = L("Open %@ with WinPlay", url.lastPathComponent)
+            a.informativeText = L("Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed.")
+            let install = L("Run the installer"), add = L("Add as a game or app")
+            for t in looksLikeInstaller ? [install, add] : [add, install] { a.addButton(withTitle: t) }
+            a.addButton(withTitle: L("Cancel"))
+            let r = a.runModal()
+            guard r != .alertThirdButtonReturn else { return }
+            let first = r == .alertFirstButtonReturn
+            if first == looksLikeInstaller { runInstaller(url) } else if let b = addProgram(url) { play(b) }
+        }
+    }
+
+    /// Makes WinPlay the app that opens .exe, .msi, .bat and .cmd files (macOS asks to confirm).
+    func makeDefaultOpener() {
+        let app = Bundle.main.bundleURL
+        let types = ["com.microsoft.windows-executable", "com.microsoft.windows-installer", "com.microsoft.windows-batch-file"]
+            .compactMap { UTType($0) }
+        Task {
+            var failed = false
+            for t in types {
+                do { try await NSWorkspace.shared.setDefaultApplication(at: app, toOpen: t) } catch { failed = true }
+            }
+            message = failed ? L("macOS didn't change the default app. You can also do it in Finder: Get Info → Open with → Change All.")
+                             : L("WinPlay now opens .exe, .msi, .bat and .cmd files.")
         }
     }
 
@@ -1127,14 +1197,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillFinishLaunching(_ notification: Notification) {
         UserDefaults.standard.set(false, forKey: "NSQuitAlwaysKeepsWindows")
     }
+    func application(_ application: NSApplication, open urls: [URL]) {
+        Task { @MainActor in Library.shared.open(files: urls) }
+    }
 }
 
 @main
 struct WinPlayApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @StateObject private var lib = Library()
+    @StateObject private var lib = Library.shared
     var body: some Scene {
-        WindowGroup("WinPlay") {
+        // one window: a WindowGroup would open another window for every file opened from Finder
+        Window("WinPlay", id: "main") {
             ContentView().environmentObject(lib)
         }
         .defaultSize(width: 760, height: 540)
@@ -1142,6 +1216,9 @@ struct WinPlayApp: App {
             CommandGroup(replacing: .newItem) {
                 Button(L("Add a game or app (.exe)…")) { lib.addProgram() }.keyboardShortcut("o")
                 Button(L("Run a Windows installer…")) { lib.runInstaller() }.keyboardShortcut("i")
+            }
+            CommandGroup(after: .appSettings) {
+                Button(L("Open Windows Programs with WinPlay")) { lib.makeDefaultOpener() }
             }
         }
     }

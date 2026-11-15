@@ -15,6 +15,13 @@
 "The installer didn't add a program. Choose one in the game's settings, or remove it." = "The installer didn't add a program. Choose one in the game's settings, or remove it.";
 "No new programs in %@." = "No new programs in %@.";
 "Added %ld programs to your library." = "Added %ld programs to your library.";
+"Open %@ with WinPlay" = "Open %@ with WinPlay";
+"Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed." = "Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed.";
+"Run the installer" = "Run the installer";
+"Add as a game or app" = "Add as a game or app";
+"Cancel" = "Cancel";
+"macOS didn't change the default app. You can also do it in Finder: Get Info → Open with → Change All." = "macOS didn't change the default app. You can also do it in Finder: Get Info → Open with → Change All.";
+"WinPlay now opens .exe, .msi, .bat and .cmd files." = "WinPlay now opens .exe, .msi, .bat and .cmd files.";
 "Steam is already in your library." = "Steam is already in your library.";
 "Installing Steam…" = "Installing Steam…";
 "Steam installed. Press Play and sign in; the first start updates Steam and takes a few minutes." = "Steam installed. Press Play and sign in; the first start updates Steam and takes a few minutes.";
@@ -28,7 +35,6 @@
 "Remove %@ from your library?" = "Remove %@ from your library?";
 "It's installed in the Windows bottle of %@, so its files stay there." = "It's installed in the Windows bottle of %@, so its files stay there.";
 "Remove" = "Remove";
-"Cancel" = "Cancel";
 "Removed %@." = "Removed %@.";
 "Do you also want to delete its Windows bottle? That's its own sandbox, with everything installed in it, its settings and its saves." = "Do you also want to delete its Windows bottle? That's its own sandbox, with everything installed in it, its settings and its saves.";
 "Keep it to bring %@ back later from Add → Removed games. Delete it to free the space; it goes to the Trash." = "Keep it to bring %@ back later from Add → Removed games. Delete it to free the space; it goes to the Trash.";
@@ -94,6 +100,7 @@
 "Add a game's .exe, run a Windows installer, or install Steam." = "Add a game's .exe, run a Windows installer, or install Steam.";
 "Downloading %@…" = "Downloading %@…";
 "No controller" = "No controller";
+"Open Windows Programs with WinPlay" = "Open Windows Programs with WinPlay";
 "USB" = "USB";
 "Bluetooth" = "Bluetooth";
 "Wireless" = "Wireless";

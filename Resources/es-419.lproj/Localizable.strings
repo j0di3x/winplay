@@ -15,6 +15,13 @@
 "The installer didn't add a program. Choose one in the game's settings, or remove it." = "El instalador no agregó ningún programa. Elige uno en la configuración del juego o elimínalo.";
 "No new programs in %@." = "No hay programas nuevos en %@.";
 "Added %ld programs to your library." = "Se agregaron %ld programas a tu biblioteca.";
+"Open %@ with WinPlay" = "Abrir %@ con WinPlay";
+"Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed." = "¿Es un instalador, o el juego o la app en sí? Un instalador se ejecuta en un entorno nuevo y después WinPlay te ofrece lo que instaló.";
+"Run the installer" = "Ejecutar el instalador";
+"Add as a game or app" = "Agregar como juego o app";
+"Cancel" = "Cancelar";
+"macOS didn't change the default app. You can also do it in Finder: Get Info → Open with → Change All." = "macOS no cambió la app predeterminada. También puedes hacerlo en el Finder: Obtener información → Abrir con → Cambiar todo.";
+"WinPlay now opens .exe, .msi, .bat and .cmd files." = "WinPlay ahora abre archivos .exe, .msi, .bat y .cmd.";
 "Steam is already in your library." = "Steam ya está en tu biblioteca.";
 "Installing Steam…" = "Instalando Steam…";
 "Steam installed. Press Play and sign in; the first start updates Steam and takes a few minutes." = "Steam instalado. Presiona Jugar e inicia sesión; la primera vez Steam se actualiza y tarda unos minutos.";
@@ -28,7 +35,6 @@
 "Remove %@ from your library?" = "¿Quitar %@ de tu biblioteca?";
 "It's installed in the Windows bottle of %@, so its files stay there." = "Está instalado en el entorno de Windows de %@, así que sus archivos se quedan ahí.";
 "Remove" = "Eliminar";
-"Cancel" = "Cancelar";
 "Removed %@." = "%@ eliminado.";
 "Do you also want to delete its Windows bottle? That's its own sandbox, with everything installed in it, its settings and its saves." = "¿También quieres borrar su entorno de Windows? Es su propio espacio aislado, con todo lo instalado en él, su configuración y sus partidas guardadas.";
 "Keep it to bring %@ back later from Add → Removed games. Delete it to free the space; it goes to the Trash." = "Consérvalo para recuperar %@ más tarde desde Agregar → Juegos quitados. Bórralo para liberar espacio; se irá a la Papelera.";
@@ -94,6 +100,7 @@
 "Add a game's .exe, run a Windows installer, or install Steam." = "Agrega el .exe de un juego, ejecuta un instalador de Windows o instala Steam.";
 "Downloading %@…" = "Descargando %@…";
 "No controller" = "Sin control";
+"Open Windows Programs with WinPlay" = "Abrir programas de Windows con WinPlay";
 "USB" = "USB";
 "Bluetooth" = "Bluetooth";
 "Wireless" = "Inalámbrico";

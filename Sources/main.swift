@@ -70,11 +70,21 @@ struct Bottle: Codable, Identifiable, Hashable {
     var windowsVersion = "win10"
     var kind = "program"          // "program" or "steam"
     var added = Date()
+    // Optional so bottle.json files from 0.1.0 still load.
+    /// Set when this tile runs in another game's bottle (a second program an installer added there).
+    var host: String? = nil
+    /// Every .exe already seen in this bottle (Windows paths), so only new ones are offered.
+    var knownPrograms: [String]? = nil
+    /// Removed from the library, but its bottle was kept. Shown under Add → Removed games.
+    var hidden: Bool? = nil
 
     var folder: URL { Paths.bottles.appendingPathComponent(id) }
-    var prefix: URL { folder.appendingPathComponent("prefix") }
+    /// The folder of the bottle the program runs in: its own, or its host's.
+    var bottleFolder: URL { host.map { Paths.bottles.appendingPathComponent($0) } ?? folder }
+    var prefix: URL { bottleFolder.appendingPathComponent("prefix") }
     var cDrive: URL { prefix.appendingPathComponent("drive_c") }
-    var log: URL { folder.appendingPathComponent("last-run.log") }
+    var log: URL { bottleFolder.appendingPathComponent("last-run.log") }
+    var isHidden: Bool { hidden ?? false }
     var iconFile: URL { folder.appendingPathComponent("icon.png") }
 
     /// The program as a Mac file, wherever it lives (Mac path, or C:\ inside the bottle).
@@ -188,8 +198,10 @@ final class Library: ObservableObject {
     @Published var gptkVersion = ""
     @Published var templateOK = false
 
-    // choosing the program after an installer
-    @Published var pickProgram: (bottle: Bottle, candidates: [URL])? = nil
+    /// Bottles removed from the library whose Windows setup was kept.
+    @Published var keptBottles: [Bottle] = []
+    /// New programs found in a bottle, waiting for the user to pick which to add.
+    @Published var newPrograms: NewPrograms? = nil
     @Published var editing: Bottle? = nil
 
     // controllers
@@ -237,8 +249,25 @@ final class Library: ObservableObject {
         let fm = FileManager.default
         try? fm.createDirectory(at: Paths.bottles, withIntermediateDirectories: true)
         let dirs = (try? fm.contentsOfDirectory(at: Paths.bottles, includingPropertiesForKeys: nil)) ?? []
-        bottles = dirs.compactMap(Bottle.load).sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
-        for b in bottles where icons[b.id] == nil { loadIcon(b) }
+        let all = dirs.compactMap(Bottle.load).sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        bottles = all.filter { !$0.isHidden }
+        keptBottles = all.filter(\.isHidden)
+        for b in all where icons[b.id] == nil { loadIcon(b) }
+    }
+
+    /// The bottle record that owns the Windows setup a tile runs in (may be a kept, hidden one).
+    func owner(of b: Bottle) -> Bottle {
+        guard let h = b.host else { return b }
+        return (bottles + keptBottles).first { $0.id == h } ?? b
+    }
+
+    /// Tiles that run in `b`'s bottle (besides `b` itself).
+    func guests(of b: Bottle) -> [Bottle] { (bottles + keptBottles).filter { $0.host == b.id } }
+
+    private func store(_ b: Bottle) {
+        b.save()
+        if let i = bottles.firstIndex(where: { $0.id == b.id }) { bottles[i] = b }
+        if let i = keptBottles.firstIndex(where: { $0.id == b.id }) { keptBottles[i] = b }
     }
 
     func loadIcon(_ b: Bottle) {
@@ -305,6 +334,7 @@ final class Library: ObservableObject {
             throw WinPlayError(L("Couldn't create a Windows bottle."))
         }
         b.added = Date()
+        b.knownPrograms = Library.programs(in: b).map { Library.windowsPath($0, in: b) }
         b.save()
         bottles.append(b)
         bottles.sort { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
@@ -327,7 +357,7 @@ final class Library: ObservableObject {
         } catch { message = error.localizedDescription }
     }
 
-    /// Runs a Windows installer in a new bottle, then asks which installed program to keep.
+    /// Runs a Windows installer in a new bottle. When it closes, WinPlay offers the programs it added.
     func runInstaller() {
         let panel = NSOpenPanel()
         panel.allowedContentTypes = Library.exeTypes
@@ -335,54 +365,111 @@ final class Library: ObservableObject {
         panel.directoryURL = Paths.home.appendingPathComponent("Downloads")
         guard panel.runModal() == .OK, let url = panel.url else { return }
         do {
-            var b = try newBottle(name: Library.niceName(url), program: "")
+            let b = try newBottle(name: Library.niceName(url), program: "")
             update(b)
             message = L("Running the installer. Finish it in its window…")
             launch(b, program: url.path, extra: []) { [weak self] in
-                guard let self else { return }
-                let found = Library.installedPrograms(in: b)
-                if found.count == 1 {
-                    b.program = Library.windowsPath(found[0], in: b); b.name = Library.niceName(found[0])
-                    self.update(b); self.message = L("Installed %@. Press Play.", b.name)
-                } else if found.isEmpty {
-                    self.message = L("The installer didn't add a program. Choose one in the game's settings, or remove it.")
-                } else {
-                    self.pickProgram = (b, found)
-                }
+                self?.checkForNewPrograms(b, afterInstaller: true)
             }
         } catch { message = error.localizedDescription }
     }
 
-    func choose(_ url: URL, for bottle: Bottle) {
-        var b = bottle
-        b.program = Library.windowsPath(url, in: b)
-        b.name = Library.niceName(url)
-        update(b)
-        pickProgram = nil
-        message = L("Added %@. Press Play.", b.name)
+    /// Looks for .exe files that appeared in a bottle since the last check (an installer, or a launcher
+    /// like Steam that installs games) and asks which ones to add to the library.
+    func checkForNewPrograms(_ tile: Bottle, afterInstaller: Bool = false, manual: Bool = false) {
+        guard newPrograms == nil else { return }      // one question at a time; the next check finds the rest
+        let o = owner(of: tile)
+        Task.detached {
+            let found = Library.programs(in: o)
+            await MainActor.run {
+                var o = self.owner(of: tile)
+                let paths = found.map { Library.windowsPath($0, in: o) }
+                guard let known = o.knownPrograms else {
+                    // a bottle from WinPlay 0.1.0: remember what's there now, ask from the next time on
+                    o.knownPrograms = paths; self.store(o); return
+                }
+                let inLibrary = Set(([o] + self.guests(of: o)).map { $0.program.lowercased() })
+                let knownSet = Set(known.map { $0.lowercased() })
+                let new = zip(found, paths).filter { !knownSet.contains($0.1.lowercased()) && !inLibrary.contains($0.1.lowercased()) }.map(\.0)
+                if new.isEmpty {
+                    if afterInstaller && o.program.isEmpty {
+                        self.message = L("The installer didn't add a program. Choose one in the game's settings, or remove it.")
+                    } else if manual {
+                        self.message = L("No new programs in %@.", o.name)
+                    }
+                    return
+                }
+                self.newPrograms = NewPrograms(owner: o, candidates: Array(new.prefix(40)), afterInstaller: afterInstaller)
+            }
+        }
     }
 
-    /// .exe files an installer put into the bottle, biggest first (usually the game itself).
-    static func installedPrograms(in b: Bottle) -> [URL] {
+    /// The user's answer to the "new programs" question.
+    func addNewPrograms(_ chosen: [URL]) {
+        guard let q = newPrograms else { return }
+        newPrograms = nil
+        var o = owner(of: q.owner)
+        o.knownPrograms = Array(Set((o.knownPrograms ?? []) + q.candidates.map { Library.windowsPath($0, in: o) }))
+        var rest = chosen
+        // an installer's own tile has no program yet: the first pick becomes its program
+        if o.program.isEmpty, let first = rest.first {
+            rest.removeFirst()
+            o.program = Library.windowsPath(first, in: o); o.name = Library.niceName(first)
+            try? FileManager.default.removeItem(at: o.iconFile); icons[o.id] = nil
+        }
+        store(o)
+        loadIcon(o)
+        for u in rest {
+            let id = String(UUID().uuidString.prefix(8)).lowercased()
+            var g = Bottle(id: id, name: Library.niceName(u), program: Library.windowsPath(u, in: o))
+            g.host = o.id
+            g.metal4 = o.metal4; g.d3dmetal = o.d3dmetal; g.windowsVersion = o.windowsVersion; g.added = Date()
+            try? FileManager.default.createDirectory(at: g.folder, withIntermediateDirectories: true)
+            g.save()
+            bottles.append(g)
+            loadIcon(g)
+        }
+        bottles.sort { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        if chosen.isEmpty {
+            message = o.program.isEmpty ? L("The installer didn't add a program. Choose one in the game's settings, or remove it.") : ""
+        } else {
+            message = chosen.count == 1 ? L("Added %@. Press Play.", Library.niceName(chosen[0]))
+                                        : L("Added %ld programs to your library.", chosen.count)
+        }
+    }
+
+    /// Programs in a bottle's Program Files folders (and the other usual install places), biggest first.
+    nonisolated static func programs(in b: Bottle) -> [URL] {
         let fm = FileManager.default
         let skip = ["unins", "uninstall", "setup", "install", "crash", "report", "redist", "vcredist", "dxsetup",
-                    "dotnet", "update", "helper", "launcherpatcher", "unitycrash", "ue4prereq", "easyanticheat_setup"]
+                    "dotnet", "update", "helper", "launcherpatcher", "unitycrash", "ue4prereq", "easyanticheat_setup",
+                    "steamwebhelper", "steamerrorreporter", "steamservice", "driverquery"]
         var roots = ["Program Files", "Program Files (x86)", "ProgramData", "Games"].map { b.cDrive.appendingPathComponent($0) }
         roots += ((try? fm.contentsOfDirectory(at: b.cDrive.appendingPathComponent("users"), includingPropertiesForKeys: nil)) ?? [])
             .map { $0.appendingPathComponent("AppData/Local/Programs") }
         var out: [(URL, Int)] = []
         for root in roots {
-            guard let en = fm.enumerator(at: root, includingPropertiesForKeys: [.fileSizeKey, .creationDateKey]) else { continue }
+            guard let en = fm.enumerator(at: root, includingPropertiesForKeys: [.fileSizeKey]) else { continue }
             for case let u as URL in en where u.pathExtension.lowercased() == "exe" {
                 let n = u.deletingPathExtension().lastPathComponent.lowercased()
                 if skip.contains(where: { n.contains($0) }) { continue }
-                if u.path.contains("/Windows NT/") || u.path.contains("/Internet Explorer/") || u.path.contains("/Windows Media Player/") || u.path.contains("/Common Files/") { continue }
-                let v = try? u.resourceValues(forKeys: [.fileSizeKey, .creationDateKey])
-                if let c = v?.creationDate, c < b.added.addingTimeInterval(-5) { continue }
-                out.append((u, v?.fileSize ?? 0))
+                let p = u.path
+                if ["/Windows NT/", "/Internet Explorer/", "/Windows Media Player/", "/Common Files/"].contains(where: p.contains) { continue }
+                // Steam's own files are its business; games it installs live in steamapps/common
+                if p.contains("/Steam/") && !p.contains("/steamapps/common/") { continue }
+                out.append((u, (try? u.resourceValues(forKeys: [.fileSizeKey]))?.fileSize ?? 0))
+                if out.count > 2000 { break }
             }
         }
-        return out.sorted { $0.1 > $1.1 }.prefix(12).map(\.0)
+        return out.sorted { $0.1 > $1.1 }.map(\.0)
+    }
+
+    /// The folder a program was installed into (C:\Program Files\<this>), to tell programs apart.
+    static func installFolder(_ u: URL, in b: Bottle) -> String {
+        let parts = Array(u.path.dropFirst(b.cDrive.path.count).split(separator: "/").map(String.init).dropLast())
+        let roots: Set = ["program files", "program files (x86)", "programdata", "games", "programs", "common"]
+        if let i = parts.lastIndex(where: { roots.contains($0.lowercased()) }), i + 1 < parts.count { return parts[i + 1] }
+        return parts.last ?? ""
     }
 
     static func windowsPath(_ url: URL, in b: Bottle) -> String {
@@ -420,6 +507,7 @@ final class Library: ObservableObject {
                     if b.programExists {
                         self.loadIcon(b)
                         self.message = L("Steam installed. Press Play and sign in; the first start updates Steam and takes a few minutes.")
+                        self.checkForNewPrograms(b)
                     } else {
                         self.message = L("Steam's installer didn't finish. Try again, or remove the Steam tile.")
                     }
@@ -465,6 +553,8 @@ final class Library: ObservableObject {
         message = L("Starting %@…", b.name)
         launch(b, program: b.program, extra: extra) { [weak self] in
             self?.message = L("%@ closed.", b.name)
+            // a game launcher or Steam may have installed something new
+            self?.checkForNewPrograms(b)
         }
     }
 
@@ -472,7 +562,7 @@ final class Library: ObservableObject {
     func launch(_ b: Bottle, program: String, extra: [String], done: @escaping @MainActor () -> Void) {
         let p = Process()
         p.executableURL = URL(fileURLWithPath: "/bin/zsh")
-        p.arguments = [Paths.bin.appendingPathComponent("run.sh").path, b.folder.path, program] + extra
+        p.arguments = [Paths.bin.appendingPathComponent("run.sh").path, b.bottleFolder.path, program] + extra
         var env = ProcessInfo.processInfo.environment
         env["WP_METAL4"] = b.metal4 ? "1" : "0"
         env["WP_HUD"] = b.fpsCounter ? "1" : "0"
@@ -495,22 +585,87 @@ final class Library: ObservableObject {
 
     func stop(_ b: Bottle) {
         message = L("Closing %@…", b.name)
-        Task.detached { runScript("stop.sh", [b.folder.path]) }
+        Task.detached { runScript("stop.sh", [b.bottleFolder.path]) }
     }
 
+    /// Removes a tile. For a game with its own bottle, asks whether to keep the bottle (to bring the
+    /// game back later) or delete it.
     func remove(_ b: Bottle) {
         let a = NSAlert()
-        a.messageText = L("Remove %@?", b.name)
-        a.informativeText = b.program.hasPrefix("/")
-            ? L("Its Windows bottle and saved settings go to the Trash. The game's own files stay where they are.")
-            : L("Its Windows bottle, with everything installed in it and its saves, goes to the Trash.")
-        a.addButton(withTitle: L("Remove")); a.addButton(withTitle: L("Cancel"))
+        a.messageText = L("Remove %@ from your library?", b.name)
+        if b.host != nil {
+            // a second program in another game's bottle: nothing of its own to delete
+            a.informativeText = L("It's installed in the Windows bottle of %@, so its files stay there.", owner(of: b).name)
+            a.addButton(withTitle: L("Remove")); a.addButton(withTitle: L("Cancel"))
+            guard a.runModal() == .alertFirstButtonReturn else { return }
+            try? FileManager.default.trashItem(at: b.folder, resultingItemURL: nil)
+            bottles.removeAll { $0.id == b.id }; icons[b.id] = nil
+            message = L("Removed %@.", b.name)
+            return
+        }
+        let guests = guests(of: b)
+        var text = L("Do you also want to delete its Windows bottle? That's its own sandbox, with everything installed in it, its settings and its saves.")
+        text += "\n\n" + L("Keep it to bring %@ back later from Add → Removed games. Delete it to free the space; it goes to the Trash.", b.name)
+        if b.program.hasPrefix("/") { text += " " + L("The game's own files stay where they are.") }
+        if !guests.isEmpty {
+            text += "\n\n" + L("Also in this bottle: %@. Those stay if you keep it, and are removed if you delete it.",
+                               guests.map(\.name).joined(separator: ", "))
+        }
+        a.informativeText = text
+        a.addButton(withTitle: L("Keep the bottle"))
+        let del = a.addButton(withTitle: L("Delete the bottle")); del.hasDestructiveAction = true
+        a.addButton(withTitle: L("Cancel"))
+        switch a.runModal() {
+        case .alertFirstButtonReturn:
+            var k = b; k.hidden = true; k.save()
+            bottles.removeAll { $0.id == b.id }
+            keptBottles.append(k)
+            message = L("Removed %@. Its bottle was kept.", b.name)
+        case .alertSecondButtonReturn:
+            deleteBottle(b)
+            message = L("Removed %@ and deleted its bottle.", b.name)
+        default: return
+        }
+    }
+
+    /// Puts a bottle (and the tiles that run in it) in the Trash.
+    private func deleteBottle(_ b: Bottle) {
+        let tiles = [b] + guests(of: b)
+        if tiles.contains(where: { running.contains($0.id) }) { runScript("stop.sh", [b.folder.path]) }
+        for t in tiles {
+            try? FileManager.default.trashItem(at: t.folder, resultingItemURL: nil)
+            icons[t.id] = nil
+        }
+        let ids = Set(tiles.map(\.id))
+        bottles.removeAll { ids.contains($0.id) }
+        keptBottles.removeAll { ids.contains($0.id) }
+    }
+
+    /// Brings a removed game back from its kept bottle.
+    func restore(_ b: Bottle) {
+        var r = b; r.hidden = nil; r.save()
+        keptBottles.removeAll { $0.id == b.id }
+        bottles.append(r)
+        bottles.sort { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        loadIcon(r)
+        message = L("%@ is back in your library.", b.name)
+    }
+
+    /// Deletes a kept bottle for good (to the Trash), after asking.
+    func deleteKept(_ b: Bottle) {
+        let a = NSAlert()
+        a.messageText = L("Delete the bottle of %@?", b.name)
+        var text = L("Everything installed in it, its settings and its saves go to the Trash.")
+        let guests = guests(of: b)
+        if !guests.isEmpty {
+            text += "\n\n" + L("Also in this bottle, and removed with it: %@.", guests.map(\.name).joined(separator: ", "))
+        }
+        a.informativeText = text
+        let del = a.addButton(withTitle: L("Delete the bottle")); del.hasDestructiveAction = true
+        a.addButton(withTitle: L("Cancel"))
         guard a.runModal() == .alertFirstButtonReturn else { return }
-        if running.contains(b.id) { runScript("stop.sh", [b.folder.path]) }
-        try? FileManager.default.trashItem(at: b.folder, resultingItemURL: nil)
-        bottles.removeAll { $0.id == b.id }
-        icons[b.id] = nil
-        message = L("Removed %@.", b.name)
+        deleteBottle(b)
+        message = L("Deleted the bottle of %@.", b.name)
     }
 
     func open(_ url: URL) { NSWorkspace.shared.open(url) }
@@ -734,6 +889,7 @@ struct Tile: View {
             Button(L("Open C: drive")) { lib.open(bottle.cDrive) }
             if let f = bottle.programFile { Button(L("Show program in Finder")) { NSWorkspace.shared.activateFileViewerSelecting([f]) } }
             Button(L("Open last log")) { lib.open(bottle.log) }
+            Button(L("Look for new programs")) { lib.checkForNewPrograms(bottle, manual: true) }
             Divider()
             Button(L("Install Visual C++ runtimes")) { lib.installVCRedist(bottle) }
             Button(L("Wine settings")) { lib.openWineSettings(bottle) }
@@ -801,35 +957,62 @@ struct SettingsSheet: View {
     }
 }
 
-struct PickProgramSheet: View {
+/// Programs that showed up in a bottle, waiting for an answer.
+struct NewPrograms: Identifiable {
+    let id = UUID()
+    let owner: Bottle
+    let candidates: [URL]       // biggest first
+    let afterInstaller: Bool
+}
+
+struct NewProgramsSheet: View {
     @EnvironmentObject var lib: Library
-    let bottle: Bottle
-    let candidates: [URL]
-    @State private var selection: URL?
+    let found: NewPrograms
+    @State private var picked: Set<URL> = []
+    @State private var icons: [URL: NSImage] = [:]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(L("Which program should Play start?")).font(.headline)
-            Caption(L("The installer added these. The biggest one is usually the game."))
-            List(candidates, id: \.self, selection: $selection) { u in
-                HStack {
-                    if let img = ExeIcon.image(for: u) { Image(nsImage: img).resizable().frame(width: 20, height: 20) }
-                    VStack(alignment: .leading) {
-                        Text(u.lastPathComponent)
-                        Caption(Library.windowsPath(u.deletingLastPathComponent(), in: bottle))
+            Text(found.afterInstaller ? L("The installer added new programs") : L("New programs in %@", found.owner.name))
+                .font(.headline)
+            Caption(L("Add the ones you want to your library. The biggest program in each folder is usually the game or app itself."))
+            List(found.candidates, id: \.self) { u in
+                Toggle(isOn: Binding(get: { picked.contains(u) }, set: { if $0 { picked.insert(u) } else { picked.remove(u) } })) {
+                    HStack {
+                        Group {
+                            if let img = icons[u] { Image(nsImage: img).resizable() }
+                            else { Image(systemName: "app.dashed").resizable().foregroundStyle(.secondary) }
+                        }
+                        .frame(width: 22, height: 22)
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(Library.niceName(u))
+                            Caption(Library.windowsPath(u, in: found.owner)).lineLimit(1).truncationMode(.middle)
+                        }
                     }
                 }
+                .toggleStyle(.checkbox)
             }
-            .frame(height: 220)
+            .frame(height: 240)
             HStack {
+                Text(L("%ld selected", picked.count)).font(.caption).foregroundStyle(.secondary)
                 Spacer()
-                Button(L("Later")) { lib.pickProgram = nil }
-                Button(L("Use this program")) { if let s = selection { lib.choose(s, for: bottle) } }
-                    .keyboardShortcut(.defaultAction).disabled(selection == nil)
+                Button(L("Don't add")) { lib.addNewPrograms([]) }
+                Button(L("Add to library")) { lib.addNewPrograms(found.candidates.filter(picked.contains)) }
+                    .keyboardShortcut(.defaultAction).disabled(picked.isEmpty)
             }
         }
-        .padding(20).frame(width: 520)
-        .onAppear { selection = candidates.first }
+        .padding(20).frame(width: 540)
+        .onAppear {
+            // preselect the biggest program of each install folder (the list is biggest first)
+            var seen = Set<String>()
+            for u in found.candidates where seen.insert(Library.installFolder(u, in: found.owner).lowercased()).inserted {
+                picked.insert(u)
+            }
+            let list = found.candidates
+            Task.detached {
+                for u in list { if let img = ExeIcon.image(for: u) { await MainActor.run { icons[u] = img } } }
+            }
+        }
     }
 }
 
@@ -860,14 +1043,23 @@ struct ContentView: View {
                     Button(L("Run a Windows installer…")) { lib.runInstaller() }
                     Divider()
                     Button(L("Install Steam")) { lib.installSteam() }
+                    if !lib.keptBottles.isEmpty {
+                        Divider()
+                        Menu(L("Removed games")) {
+                            ForEach(lib.keptBottles) { k in
+                                Menu(k.name) {
+                                    Button(L("Bring back")) { lib.restore(k) }
+                                    Button(L("Delete the bottle…")) { lib.deleteKept(k) }
+                                }
+                            }
+                        }
+                    }
                 } label: { Label(L("Add"), systemImage: "plus") }
                 .disabled(!lib.ready || lib.busy || lib.downloading)
             }
         }
         .sheet(item: $lib.editing) { SettingsSheet(bottle: $0) }
-        .sheet(isPresented: Binding(get: { lib.pickProgram != nil }, set: { if !$0 { lib.pickProgram = nil } })) {
-            if let p = lib.pickProgram { PickProgramSheet(bottle: p.bottle, candidates: p.candidates) }
-        }
+        .sheet(item: $lib.newPrograms) { NewProgramsSheet(found: $0).interactiveDismissDisabled() }
     }
 
     var setupBox: some View {

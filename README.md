@@ -15,13 +15,19 @@ on Metal. Each game gets its own Windows setup, so one broken install never affe
 
 - **Library:** your games and apps as tiles with their real icons; Play, Stop, double-click to start
 - **Add anything:** point at a game's `.exe` (portable games, games on an external drive), or run
-  a Windows installer (`setup.exe` / `.msi`) and WinPlay finds the installed program afterwards
+  a Windows installer (`setup.exe` / `.msi`)
+- **Finds new programs:** whenever an installer, a game launcher or Steam closes, WinPlay looks in
+  that bottle's `Program Files` and `Program Files (x86)` for new `.exe` files and asks which ones
+  to add to the library. Right-click a tile → *Look for new programs* to check by hand
 - **Steam:** one click installs the Windows Steam client into its own bottle, so you can sign in and
   play your Steam library
 - **One bottle per game:** a clean Windows 10 setup cloned in under a second (APFS clones, so it
   takes almost no disk space until the game writes to it)
 - **Per-game settings:** launch options, Windows version (XP to 11), Apple D3DMetal on/off, Metal 4,
   FPS counter (Metal HUD)
+- **Keep or delete the bottle:** when you remove a game, choose whether its bottle (its sandbox,
+  with saves and settings) goes to the Trash or stays. Kept games come back from
+  *Add → Removed games*
 - **Fixes:** Visual C++ runtimes in one click, Wine settings, open the C: drive, open the last log
 - **Controllers:** the footer shows the connected controller or wheel
 - **13 languages:** English, Deutsch, Español (España), Español (Latinoamérica), Français, 日本語,

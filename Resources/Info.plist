@@ -1,54 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0"><dict>
-<key>CFBundleDevelopmentRegion</key><string>en</string>
-<key>CFBundleName</key><string>WinPlay</string>
-<key>CFBundleDisplayName</key><string>WinPlay</string>
-<key>CFBundleIdentifier</key><string>io.github.winplay</string>
-<key>CFBundleExecutable</key><string>WinPlay</string>
-<key>CFBundleIconFile</key><string>AppIcon</string>
-<key>CFBundlePackageType</key><string>APPL</string>
-<key>CFBundleShortVersionString</key><string>0.3.0</string>
-<key>CFBundleVersion</key><string>3</string>
-<key>LSMinimumSystemVersion</key><string>14.0</string>
-<key>LSApplicationCategoryType</key><string>public.app-category.games</string>
-<key>NSHighResolutionCapable</key><true/>
-<key>CFBundleDocumentTypes</key><array>
-  <dict>
-    <key>CFBundleTypeName</key><string>Windows program</string>
-    <key>CFBundleTypeRole</key><string>Viewer</string>
-    <key>LSHandlerRank</key><string>Default</string>
-    <key>LSItemContentTypes</key><array>
-      <string>com.microsoft.windows-executable</string>
-      <string>com.microsoft.windows-batch-file</string>
-    </array>
-  </dict>
-  <dict>
-    <key>CFBundleTypeName</key><string>Windows installer</string>
-    <key>CFBundleTypeRole</key><string>Viewer</string>
-    <key>LSHandlerRank</key><string>Default</string>
-    <key>LSItemContentTypes</key><array>
-      <string>com.microsoft.windows-installer</string>
-    </array>
-  </dict>
-</array>
-<key>UTImportedTypeDeclarations</key><array>
-  <dict>
-    <key>UTTypeIdentifier</key><string>com.microsoft.windows-installer</string>
-    <key>UTTypeDescription</key><string>Windows Installer package</string>
-    <key>UTTypeConformsTo</key><array><string>public.data</string></array>
-    <key>UTTypeTagSpecification</key><dict>
-      <key>public.filename-extension</key><array><string>msi</string></array>
-      <key>public.mime-type</key><array><string>application/x-msi</string></array>
-    </dict>
-  </dict>
-  <dict>
-    <key>UTTypeIdentifier</key><string>com.microsoft.windows-batch-file</string>
-    <key>UTTypeDescription</key><string>Windows batch file</string>
-    <key>UTTypeConformsTo</key><array><string>public.data</string></array>
-    <key>UTTypeTagSpecification</key><dict>
-      <key>public.filename-extension</key><array><string>bat</string><string>cmd</string></array>
-    </dict>
-  </dict>
-</array>
-</dict></plist>
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>WinPlay</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Windows program</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.microsoft.windows-executable</string>
+				<string>com.microsoft.windows-batch-file</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Windows installer</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.microsoft.windows-installer</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleExecutable</key>
+	<string>WinPlay</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
+	<key>CFBundleIdentifier</key>
+	<string>io.github.winplay</string>
+	<key>CFBundleName</key>
+	<string>WinPlay</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.3.1</string>
+	<key>CFBundleVersion</key>
+	<string>4</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.games</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>14.0</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Windows Installer package</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.microsoft.windows-installer</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>msi</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-msi</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Windows batch file</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.microsoft.windows-batch-file</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>bat</string>
+					<string>cmd</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -40,4 +40,11 @@ if [ ! -f "$R/template/system.reg" ]; then
   [ -f "$R/template/system.reg" ] || { echo "Creating the Windows template failed. See logs/template.log."; exit 1; }
   echo "Windows template created"
 fi
+# Windows fonts in C:\Windows\Fonts. Wine reads its own copies anyway, but Chromium-based apps
+# (Steam, launchers) use DirectWrite, which only sees this folder; without it Steam's window
+# never opens (its web helper overflows its stack while sizing text).
+if [ -d "$R/wine/share/wine/fonts" ] && [ ! -e "$R/template/drive_c/windows/Fonts/arial.ttf" ]; then
+  mkdir -p "$R/template/drive_c/windows/Fonts"
+  cp -c "$R/wine/share/wine/fonts/"* "$R/template/drive_c/windows/Fonts/" 2>/dev/null
+fi
 echo "Runtime ready"

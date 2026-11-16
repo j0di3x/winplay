@@ -13,6 +13,9 @@ if [ "${WP_D3DMETAL:-1}" = 1 ] && [ -f "$GPTK/external/libd3dshared.dylib" ]; th
 fi
 [ "$WP_METAL4" = 1 ] && export D3DM_MTL4=1
 [ "$WP_HUD" = 1 ] && export MTL_HUD_ENABLED=1
+# bottles made before 0.3.1 have no fonts in C:\Windows\Fonts (see setup-runtime.sh)
+F="$WINEPREFIX/drive_c/windows/Fonts"
+[ -e "$F/arial.ttf" ] || { mkdir -p "$F"; cp -c "$W/share/wine/fonts/"* "$F/" 2>/dev/null; }
 LOG="$B/last-run.log"
 echo "== $(date) $EXE $* (d3dmetal=${WP_D3DMETAL:-1} metal4=$WP_METAL4 hud=$WP_HUD)" > "$LOG"
 if [[ "$EXE" == /* ]]; then cd "${EXE:h}"; else cd "$B/prefix/drive_c"; fi

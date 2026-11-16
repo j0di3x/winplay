@@ -1246,6 +1246,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillFinishLaunching(_ notification: Notification) {
         UserDefaults.standard.set(false, forKey: "NSQuitAlwaysKeepsWindows")
     }
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        UpdateChecker.shared.start(repo: "j0di3x/winplay", appName: "WinPlay")
+    }
     func application(_ application: NSApplication, open urls: [URL]) {
         Task { @MainActor in Library.shared.open(files: urls) }
     }
@@ -1265,6 +1268,9 @@ struct WinPlayApp: App {
             CommandGroup(replacing: .newItem) {
                 Button(L("Add a game or app (.exe)…")) { lib.addProgram() }.keyboardShortcut("o")
                 Button(L("Run a Windows installer…")) { lib.runInstaller() }.keyboardShortcut("i")
+            }
+            CommandGroup(after: .appInfo) {
+                Button(L("Check for Updates…")) { Task { await UpdateChecker.shared.check(manual: true) } }
             }
             CommandGroup(after: .appSettings) {
                 Button(L("Open Windows Programs with WinPlay")) { lib.makeDefaultOpener() }

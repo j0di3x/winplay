@@ -8,7 +8,7 @@ APP="$WORK/WinPlay.app"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 swiftc -parse-as-library -swift-version 5 -O -target arm64-apple-macos14 \
   -framework SwiftUI -framework AppKit -framework IOKit -framework GameController -framework CryptoKit \
-  Sources/main.swift -o "$APP/Contents/MacOS/WinPlay"
+  Sources/*.swift -o "$APP/Contents/MacOS/WinPlay"
 ditto --norsrc --noextattr Resources/Info.plist "$APP/Contents/Info.plist"
 ditto --norsrc --noextattr Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 ditto --norsrc --noextattr Resources/scripts "$APP/Contents/Resources/scripts"

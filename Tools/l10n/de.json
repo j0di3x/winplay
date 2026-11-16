@@ -109,5 +109,15 @@
  "%@ is the %@ version": "%@ ist die %@-Version",
  "WinPlay runs Windows programs as 64-bit Intel (x64) through Rosetta, so Windows on ARM installers and programs don't run. Download the x64 version instead; it's often labelled \"64-bit\", \"x64\", \"x86-64\" or \"AMD64\".": "WinPlay führt Windows-Programme als 64-Bit-Intel (x64) über Rosetta aus, daher laufen Installer und Programme für Windows on ARM nicht. Lade stattdessen die x64-Version herunter; sie heißt oft „64-bit“, „x64“, „x86-64“ oder „AMD64“.",
  "OK": "OK",
- "Try Anyway": "Trotzdem versuchen"
+ "Try Anyway": "Trotzdem versuchen",
+ "%@ is up to date": "%@ ist aktuell",
+ "You have the newest version, %@.": "Du hast die neueste Version, %@.",
+ "Couldn't check for updates": "Nach Updates suchen fehlgeschlagen",
+ "GitHub didn't answer. Check your internet connection and try again.": "GitHub antwortet nicht. Prüfe deine Internetverbindung und versuche es erneut.",
+ "%@ %@ is available": "%@ %@ ist verfügbar",
+ "You have %@. Download the new version, open it and drag %@ onto Applications to replace this one. Your settings are kept.": "Du hast %@. Lade die neue Version herunter, öffne sie und ziehe %@ auf „Programme“, um diese zu ersetzen. Deine Einstellungen bleiben erhalten.",
+ "Download": "Herunterladen",
+ "Later": "Später",
+ "Skip This Version": "Diese Version überspringen",
+ "Check for Updates…": "Nach Updates suchen …"
 }

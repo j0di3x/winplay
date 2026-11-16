@@ -2,7 +2,7 @@
 """Lists every launcher string (the L("...") keys in Sources/main.swift), plus the game values shown through L(variable)."""
 import re, json, sys, pathlib
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-src = (ROOT / "Sources/main.swift").read_text()
+src = "\n".join(p.read_text() for p in sorted((ROOT / "Sources").glob("*.swift")))
 keys = []
 for m in re.finditer(r'\bL\("((?:[^"\\]|\\.)*)"', src):
     k = m.group(1).encode().decode("unicode_escape").encode("latin-1").decode("utf-8")

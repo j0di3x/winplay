@@ -109,5 +109,15 @@
  "%@ is the %@ version": "%@ は %@ 版です",
  "WinPlay runs Windows programs as 64-bit Intel (x64) through Rosetta, so Windows on ARM installers and programs don't run. Download the x64 version instead; it's often labelled \"64-bit\", \"x64\", \"x86-64\" or \"AMD64\".": "WinPlay は Windows プログラムを Rosetta 経由の 64 ビット Intel（x64）として実行するため、Windows on ARM 用のインストーラーやプログラムは動きません。代わりに x64 版をダウンロードしてください。「64-bit」「x64」「x86-64」「AMD64」などと表記されています。",
  "OK": "OK",
- "Try Anyway": "それでも試す"
+ "Try Anyway": "それでも試す",
+ "%@ is up to date": "%@ は最新です",
+ "You have the newest version, %@.": "最新バージョン %@ を使っています。",
+ "Couldn't check for updates": "アップデートを確認できませんでした",
+ "GitHub didn't answer. Check your internet connection and try again.": "GitHub から応答がありません。インターネット接続を確認して、もう一度お試しください。",
+ "%@ %@ is available": "%@ %@ が利用可能です",
+ "You have %@. Download the new version, open it and drag %@ onto Applications to replace this one. Your settings are kept.": "現在のバージョンは %@ です。新しいバージョンをダウンロードして開き、%@ を「アプリケーション」にドラッグして置き換えてください。設定はそのまま残ります。",
+ "Download": "ダウンロード",
+ "Later": "あとで",
+ "Skip This Version": "このバージョンをスキップ",
+ "Check for Updates…": "アップデートを確認…"
 }

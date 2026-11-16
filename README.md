@@ -33,6 +33,8 @@ on Metal. Each game gets its own Windows setup, so one broken install never affe
   *Add → Removed games*
 - **Fixes:** Visual C++ runtimes in one click, Wine settings, open the C: drive, open the last log
 - **Controllers:** the footer shows the connected controller or wheel
+- **Update check:** once a day it looks for a newer release on GitHub and offers to download it
+  (*WinPlay → Check for Updates…* checks now). Nothing is installed without you
 - **13 languages:** English, Deutsch, Español (España), Español (Latinoamérica), Français, 日本語,
   한국어, Polski, Português (Brasil), Português (Portugal), Русский, 简体中文, 繁體中文
 

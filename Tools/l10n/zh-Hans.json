@@ -109,5 +109,15 @@
  "%@ is the %@ version": "%@ 是 %@ 版本",
  "WinPlay runs Windows programs as 64-bit Intel (x64) through Rosetta, so Windows on ARM installers and programs don't run. Download the x64 version instead; it's often labelled \"64-bit\", \"x64\", \"x86-64\" or \"AMD64\".": "WinPlay 通过 Rosetta 以 64 位 Intel（x64）方式运行 Windows 程序，因此 ARM 版 Windows 的安装程序和程序无法运行。请改为下载 x64 版本，通常标为“64-bit”“x64”“x86-64”或“AMD64”。",
  "OK": "好",
- "Try Anyway": "仍要尝试"
+ "Try Anyway": "仍要尝试",
+ "%@ is up to date": "%@ 已是最新版本",
+ "You have the newest version, %@.": "你使用的是最新版本 %@。",
+ "Couldn't check for updates": "无法检查更新",
+ "GitHub didn't answer. Check your internet connection and try again.": "GitHub 没有响应。请检查网络连接后重试。",
+ "%@ %@ is available": "%@ %@ 现已推出",
+ "You have %@. Download the new version, open it and drag %@ onto Applications to replace this one. Your settings are kept.": "你当前的版本是 %@。下载新版本，打开后将 %@ 拖到“应用程序”以替换当前版本。你的设置会保留。",
+ "Download": "下载",
+ "Later": "以后",
+ "Skip This Version": "跳过此版本",
+ "Check for Updates…": "检查更新…"
 }

@@ -15,6 +15,10 @@
 "The installer didn't add a program. Choose one in the game's settings, or remove it." = "L’installeur n’a ajouté aucun programme. Choisissez-en un dans les réglages du jeu, ou supprimez-le.";
 "No new programs in %@." = "Aucun nouveau programme dans %@.";
 "Added %ld programs to your library." = "%ld programmes ajoutés à ta bibliothèque.";
+"%@ is the %@ version" = "%@ est la version %@";
+"WinPlay runs Windows programs as 64-bit Intel (x64) through Rosetta, so Windows on ARM installers and programs don't run. Download the x64 version instead; it's often labelled \"64-bit\", \"x64\", \"x86-64\" or \"AMD64\"." = "WinPlay exécute les programmes Windows en Intel 64 bits (x64) via Rosetta : les installateurs et programmes pour Windows sur ARM ne fonctionnent donc pas. Téléchargez plutôt la version x64, souvent appelée « 64-bit », « x64 », « x86-64 » ou « AMD64 ».";
+"OK" = "OK";
+"Try Anyway" = "Essayer quand même";
 "Open %@ with WinPlay" = "Ouvrir %@ avec WinPlay";
 "Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed." = "Est-ce un programme d’installation, ou le jeu ou l’app lui-même ? Un programme d’installation tourne dans un nouvel environnement, puis WinPlay te propose ce qu’il a installé.";
 "Run the installer" = "Lancer l’installation";

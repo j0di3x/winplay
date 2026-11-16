@@ -105,5 +105,9 @@
  "Add as a game or app": "Agregar como juego o app",
  "macOS didn't change the default app. You can also do it in Finder: Get Info → Open with → Change All.": "macOS no cambió la app predeterminada. También puedes hacerlo en el Finder: Obtener información → Abrir con → Cambiar todo.",
  "WinPlay now opens .exe, .msi, .bat and .cmd files.": "WinPlay ahora abre archivos .exe, .msi, .bat y .cmd.",
- "Open Windows Programs with WinPlay": "Abrir programas de Windows con WinPlay"
+ "Open Windows Programs with WinPlay": "Abrir programas de Windows con WinPlay",
+ "%@ is the %@ version": "%@ es la versión %@",
+ "WinPlay runs Windows programs as 64-bit Intel (x64) through Rosetta, so Windows on ARM installers and programs don't run. Download the x64 version instead; it's often labelled \"64-bit\", \"x64\", \"x86-64\" or \"AMD64\".": "WinPlay ejecuta los programas de Windows como Intel de 64 bits (x64) mediante Rosetta, así que los instaladores y programas para Windows en ARM no funcionan. Descarga la versión x64; suele llamarse \"64-bit\", \"x64\", \"x86-64\" o \"AMD64\".",
+ "OK": "OK",
+ "Try Anyway": "Intentar de todos modos"
 }

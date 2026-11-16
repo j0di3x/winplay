@@ -15,6 +15,10 @@
 "The installer didn't add a program. Choose one in the game's settings, or remove it." = "安裝程式沒有加入任何程式。請在遊戲設定中選擇，或將其移除。";
 "No new programs in %@." = "%@ 中沒有新程式。";
 "Added %ld programs to your library." = "已將 %ld 個程式加入資料庫。";
+"%@ is the %@ version" = "%@ 是 %@ 版本";
+"WinPlay runs Windows programs as 64-bit Intel (x64) through Rosetta, so Windows on ARM installers and programs don't run. Download the x64 version instead; it's often labelled \"64-bit\", \"x64\", \"x86-64\" or \"AMD64\"." = "WinPlay 透過 Rosetta 以 64 位元 Intel（x64）方式執行 Windows 程式，因此 ARM 版 Windows 的安裝程式和程式無法執行。請改為下載 x64 版本，通常標示為「64-bit」「x64」「x86-64」或「AMD64」。";
+"OK" = "好";
+"Try Anyway" = "仍要嘗試";
 "Open %@ with WinPlay" = "用 WinPlay 打開 %@";
 "Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed." = "這是安裝程式，還是遊戲或 App 本身？安裝程式會在新環境中執行，完成後 WinPlay 會提供它安裝的內容。";
 "Run the installer" = "執行安裝程式";

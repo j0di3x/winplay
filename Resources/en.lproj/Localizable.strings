@@ -15,6 +15,10 @@
 "The installer didn't add a program. Choose one in the game's settings, or remove it." = "The installer didn't add a program. Choose one in the game's settings, or remove it.";
 "No new programs in %@." = "No new programs in %@.";
 "Added %ld programs to your library." = "Added %ld programs to your library.";
+"%@ is the %@ version" = "%@ is the %@ version";
+"WinPlay runs Windows programs as 64-bit Intel (x64) through Rosetta, so Windows on ARM installers and programs don't run. Download the x64 version instead; it's often labelled \"64-bit\", \"x64\", \"x86-64\" or \"AMD64\"." = "WinPlay runs Windows programs as 64-bit Intel (x64) through Rosetta, so Windows on ARM installers and programs don't run. Download the x64 version instead; it's often labelled \"64-bit\", \"x64\", \"x86-64\" or \"AMD64\".";
+"OK" = "OK";
+"Try Anyway" = "Try Anyway";
 "Open %@ with WinPlay" = "Open %@ with WinPlay";
 "Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed." = "Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed.";
 "Run the installer" = "Run the installer";

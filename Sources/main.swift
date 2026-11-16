@@ -354,7 +354,8 @@ final class Library: ObservableObject {
     }
 
     @discardableResult
-    func addProgram(_ url: URL) -> Bottle? {
+    func addProgram(_ url: URL, checkArch: Bool = true) -> Bottle? {
+        if checkArch && !Library.confirmArchitecture(url) { return nil }
         do {
             let b = try newBottle(name: Library.niceName(url), program: url.path)
             loadIcon(b)
@@ -373,7 +374,8 @@ final class Library: ObservableObject {
         runInstaller(url)
     }
 
-    func runInstaller(_ url: URL) {
+    func runInstaller(_ url: URL, checkArch: Bool = true) {
+        if checkArch && !Library.confirmArchitecture(url) { return }
         do {
             let b = try newBottle(name: Library.niceName(url), program: "")
             update(b)
@@ -453,6 +455,52 @@ final class Library: ObservableObject {
         return g
     }
 
+    // MARK: Windows on ARM files
+
+    /// "ARM64" or "ARM" when the file only runs on Windows on ARM. WinPlay's Wine is an Intel (x64) build
+    /// running through Rosetta, so Windows reports an x64 processor and refuses these (.msi: error 1633).
+    nonisolated static func armOnly(_ url: URL) -> String? {
+        switch url.pathExtension.lowercased() {
+        case "exe":
+            // PE header: e_lfanew at 0x3C, then "PE\0\0" and the machine type
+            guard let h = try? FileHandle(forReadingFrom: url) else { return nil }
+            defer { try? h.close() }
+            guard let d = try? h.read(upToCount: 4096), d.count >= 64, d[0] == 0x4D, d[1] == 0x5A else { return nil }
+            let pe = Int(d[0x3C]) | Int(d[0x3D]) << 8 | Int(d[0x3E]) << 16 | Int(d[0x3F]) << 24
+            guard pe > 0, pe + 6 <= d.count, d[pe] == 0x50, d[pe + 1] == 0x45 else { return nil }
+            switch Int(d[pe + 4]) | Int(d[pe + 5]) << 8 {
+            case 0xAA64: return "ARM64"
+            case 0x01C4, 0x01C0: return "ARM"
+            default: return nil
+            }
+        case "msi":
+            // the package's Template property, e.g. "x64;1033", "Intel;1033" or "Arm64;1033"
+            guard let d = try? Data(contentsOf: url, options: .alwaysMapped) else { return nil }
+            for (tag, name) in [("Arm64;", "ARM64"), ("Arm;", "ARM")] {
+                var from = d.startIndex
+                while let r = d.range(of: Data(tag.utf8), in: from..<d.endIndex) {
+                    if r.upperBound < d.endIndex, (0x30...0x39).contains(d[r.upperBound]) { return name }
+                    from = r.upperBound
+                }
+            }
+            return nil
+        default:
+            return nil
+        }
+    }
+
+    /// Warns before running a Windows on ARM installer or program. Returns true to go ahead.
+    static func confirmArchitecture(_ url: URL) -> Bool {
+        guard let arch = armOnly(url) else { return true }
+        let a = NSAlert()
+        a.alertStyle = .warning
+        a.messageText = L("%@ is the %@ version", url.lastPathComponent, arch)
+        a.informativeText = L("WinPlay runs Windows programs as 64-bit Intel (x64) through Rosetta, so Windows on ARM installers and programs don't run. Download the x64 version instead; it's often labelled \"64-bit\", \"x64\", \"x86-64\" or \"AMD64\".")
+        a.addButton(withTitle: L("OK"))
+        a.addButton(withTitle: L("Try Anyway"))
+        return a.runModal() == .alertSecondButtonReturn
+    }
+
     // MARK: opening files from Finder
 
     static let shared = Library()
@@ -473,9 +521,10 @@ final class Library: ObservableObject {
         if ext != "msi", let o = (bottles + keptBottles).first(where: { $0.host == nil && path.hasPrefix($0.cDrive.path + "/") }) {
             play(addGuest(url, in: o)); return
         }
+        if !Library.confirmArchitecture(url) { return }
         switch ext {
-        case "msi": runInstaller(url)
-        case "bat", "cmd": if let b = addProgram(url) { play(b) }
+        case "msi": runInstaller(url, checkArch: false)
+        case "bat", "cmd": if let b = addProgram(url, checkArch: false) { play(b) }
         default:
             // an .exe can be an installer or the game itself; ask, with the likely answer first
             let n = url.deletingPathExtension().lastPathComponent.lowercased()
@@ -489,7 +538,7 @@ final class Library: ObservableObject {
             let r = a.runModal()
             guard r != .alertThirdButtonReturn else { return }
             let first = r == .alertFirstButtonReturn
-            if first == looksLikeInstaller { runInstaller(url) } else if let b = addProgram(url) { play(b) }
+            if first == looksLikeInstaller { runInstaller(url, checkArch: false) } else if let b = addProgram(url, checkArch: false) { play(b) }
         }
     }
 

@@ -15,6 +15,10 @@
 "The installer didn't add a program. Choose one in the game's settings, or remove it." = "Установщик не добавил ни одной программы. Выберите её в настройках игры или удалите игру.";
 "No new programs in %@." = "В %@ нет новых программ.";
 "Added %ld programs to your library." = "Добавлено программ в библиотеку: %ld.";
+"%@ is the %@ version" = "%@ — это версия для %@";
+"WinPlay runs Windows programs as 64-bit Intel (x64) through Rosetta, so Windows on ARM installers and programs don't run. Download the x64 version instead; it's often labelled \"64-bit\", \"x64\", \"x86-64\" or \"AMD64\"." = "WinPlay запускает программы Windows как 64-битные Intel (x64) через Rosetta, поэтому установщики и программы для Windows на ARM не работают. Скачайте версию x64; обычно она подписана «64-bit», «x64», «x86-64» или «AMD64».";
+"OK" = "OK";
+"Try Anyway" = "Всё равно попробовать";
 "Open %@ with WinPlay" = "Открыть %@ в WinPlay";
 "Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed." = "Это установщик или сама игра либо приложение? Установщик запускается в новой среде, а потом WinPlay предложит добавить то, что он установил.";
 "Run the installer" = "Запустить установщик";

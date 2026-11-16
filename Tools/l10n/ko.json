@@ -105,5 +105,9 @@
  "Add as a game or app": "게임 또는 앱으로 추가",
  "macOS didn't change the default app. You can also do it in Finder: Get Info → Open with → Change All.": "macOS가 기본 앱을 변경하지 않았습니다. Finder에서도 할 수 있습니다: 정보 가져오기 → 다음으로 열기 → 모두 변경.",
  "WinPlay now opens .exe, .msi, .bat and .cmd files.": "이제 WinPlay가 .exe, .msi, .bat, .cmd 파일을 엽니다.",
- "Open Windows Programs with WinPlay": "Windows 프로그램을 WinPlay로 열기"
+ "Open Windows Programs with WinPlay": "Windows 프로그램을 WinPlay로 열기",
+ "%@ is the %@ version": "%@은(는) %@ 버전입니다",
+ "WinPlay runs Windows programs as 64-bit Intel (x64) through Rosetta, so Windows on ARM installers and programs don't run. Download the x64 version instead; it's often labelled \"64-bit\", \"x64\", \"x86-64\" or \"AMD64\".": "WinPlay는 Windows 프로그램을 Rosetta를 통해 64비트 Intel(x64)로 실행하므로 Windows on ARM용 설치 프로그램과 프로그램은 실행되지 않습니다. 대신 x64 버전을 다운로드하세요. 보통 \"64-bit\", \"x64\", \"x86-64\" 또는 \"AMD64\"로 표시됩니다.",
+ "OK": "확인",
+ "Try Anyway": "그래도 시도"
 }

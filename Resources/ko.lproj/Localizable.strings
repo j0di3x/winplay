@@ -15,6 +15,10 @@
 "The installer didn't add a program. Choose one in the game's settings, or remove it." = "설치 프로그램이 프로그램을 추가하지 않았습니다. 게임 설정에서 선택하거나 제거하세요.";
 "No new programs in %@." = "%@에 새 프로그램이 없습니다.";
 "Added %ld programs to your library." = "프로그램 %ld개를 라이브러리에 추가했습니다.";
+"%@ is the %@ version" = "%@은(는) %@ 버전입니다";
+"WinPlay runs Windows programs as 64-bit Intel (x64) through Rosetta, so Windows on ARM installers and programs don't run. Download the x64 version instead; it's often labelled \"64-bit\", \"x64\", \"x86-64\" or \"AMD64\"." = "WinPlay는 Windows 프로그램을 Rosetta를 통해 64비트 Intel(x64)로 실행하므로 Windows on ARM용 설치 프로그램과 프로그램은 실행되지 않습니다. 대신 x64 버전을 다운로드하세요. 보통 \"64-bit\", \"x64\", \"x86-64\" 또는 \"AMD64\"로 표시됩니다.";
+"OK" = "확인";
+"Try Anyway" = "그래도 시도";
 "Open %@ with WinPlay" = "WinPlay로 %@ 열기";
 "Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed." = "설치 프로그램인가요, 아니면 게임이나 앱 자체인가요? 설치 프로그램은 새 환경에서 실행되며, 끝나면 WinPlay가 설치된 항목을 추가하도록 제안합니다.";
 "Run the installer" = "설치 프로그램 실행";

@@ -69,6 +69,9 @@ for the disk image.
   Metal 4 on GPTK 4 beta 3. The first start downloads about 1 GB of Steam updates.
 - **Won't work:** online games with kernel anti-cheat (Valorant, Fortnite, many battle royales, some
   Easy Anti-Cheat and BattlEye games). No Wine setup on a Mac can run those.
+- **Windows on ARM files won't run:** WinPlay's Windows is 64-bit Intel (x64) running through
+  Rosetta, so use the x64 download of an app ("64-bit", "x64", "x86-64", "AMD64"), not the ARM64 one.
+  WinPlay warns you when you open an ARM-only installer or program.
 - **Hit or miss:** some DRM, some installers, big apps like Office or Adobe. Very old DirectX 9 or
   OpenGL games may look better with **Apple D3DMetal** turned off in their settings.
 

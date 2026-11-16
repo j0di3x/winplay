@@ -15,6 +15,10 @@
 "The installer didn't add a program. Choose one in the game's settings, or remove it." = "インストーラはプログラムを追加しませんでした。ゲームの設定で選ぶか、削除してください。";
 "No new programs in %@." = "%@ に新しいプログラムはありません。";
 "Added %ld programs to your library." = "%ld 個のプログラムをライブラリに追加しました。";
+"%@ is the %@ version" = "%@ は %@ 版です";
+"WinPlay runs Windows programs as 64-bit Intel (x64) through Rosetta, so Windows on ARM installers and programs don't run. Download the x64 version instead; it's often labelled \"64-bit\", \"x64\", \"x86-64\" or \"AMD64\"." = "WinPlay は Windows プログラムを Rosetta 経由の 64 ビット Intel（x64）として実行するため、Windows on ARM 用のインストーラーやプログラムは動きません。代わりに x64 版をダウンロードしてください。「64-bit」「x64」「x86-64」「AMD64」などと表記されています。";
+"OK" = "OK";
+"Try Anyway" = "それでも試す";
 "Open %@ with WinPlay" = "%@ をWinPlayで開く";
 "Is it an installer, or the game or app itself? An installer runs in a new bottle, and WinPlay then offers what it installed." = "インストーラですか？ それともゲームやアプリ本体ですか？ インストーラは新しい環境で実行され、終わるとWinPlayがインストールされたものを提案します。";
 "Run the installer" = "インストーラを実行";
